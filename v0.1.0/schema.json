@@ -1,0 +1,156 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Manifest",
+  "$id": "https://github.com/error-fyi/fyi-schema/v0.1.0/schema.json",
+  "title": "error.fyi specification",
+  "description": "The error.fyi specification",
+  "definitions": {
+    "Manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string",
+          "description": "Display name of the manifest"
+        },
+        "base_url": {
+          "type": "string",
+          "format": "uri-template"
+        },
+        "version": {
+          "type": "string",
+          "format": "string"
+        },
+        "repository": {
+          "type": "string",
+          "format": "string"
+        },
+        "errors_definitions": {
+          "description": "List of the manifest's error definitions.",
+          "$ref": "#/definitions/ErrorDefinitions"
+        }
+      },
+      "required": [
+        "base_url",
+        "version",
+        "repository",
+        "name"
+      ],
+      "title": "Manifest"
+    },
+    "Suggestions": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Suggestion"
+      },
+      "required": [],
+      "title": "Suggestions"
+    },
+    "Suggestion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Unique identifier of the suggestion.",
+          "type": "string"
+        },
+        "short": {
+          "description": "Short description of the solution.",
+          "type": "string"
+        },
+        "docRef": {
+          "description": "Reference to the document .",
+          "type": "string"
+        },
+        "error_code": {
+          "description": "Error referenced by the suggestion.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "short",
+        "error_code"
+      ]
+    },
+    "ErrorDefinitions": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Error"
+      },
+      "required": [],
+      "title": "ErrorDefinitions"
+    },
+    "Error": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "description": "Unique code of the error. (max: 40 characters)",
+          "type": "string",
+          "maxLength": 40
+        },
+        "title": {
+          "description": "Name of the error, to be displayed. (max: 40 characters)",
+          "type": "string",
+          "maxLength": 40
+        },
+        "short": {
+          "description": "Short short of the error. (max: 70 characters)",
+          "type": "string",
+          "maxLength": 70
+        },
+        "long": {
+          "description": "Detailed description of the error.",
+          "type": "string"
+        },
+        "severity" : {
+          "type": "string",
+          "enum": ["severe","medium","low"]
+        },
+        "suggestions" : {
+          "type": "object",
+          "$ref": "#/definitions/Suggestions"
+        },
+        "meta": {
+          "description": "Metadata information about the error.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "loc": {
+              "description": "",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "filename": {
+                  "type": "string",
+                  "description": "Filename of the file where the error was found"
+                },
+                "line": {
+                  "type": "integer",
+                  "description": "Line number where the error was defined"
+                }
+              },
+              "required": [
+                "filename",
+                "line"
+              ]
+            }
+          }
+        }
+      },
+      "required": [
+        "short",
+        "title",
+        "code"
+      ],
+      "title": "Error"
+    }
+  }
+}
